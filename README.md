@@ -1,4 +1,4 @@
-# Rosewood Journal — Daily Planner (Advanced Edition)
+# Rosewood Journal — Daily Planner 
 
 A fully working planner, not just a static mockup. Everything you add is saved
 in your browser's `localStorage`, so it's all still there the next time you
