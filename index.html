@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#F4C9D6">
+<title>Rosewood Journal · Daily Planner</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,700;1,9..144,500&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<!-- ===== MOBILE TOP BAR ===== -->
+<div class="mobile-topbar">
+  <button class="icon-btn" id="menuToggle" aria-label="Open menu" aria-expanded="false">
+    <svg class="ic" viewBox="0 0 24 24"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+  </button>
+  <div class="mobile-brand">Rosewood <em>Journal</em></div>
+  <button class="icon-btn" id="mobileThemeToggle" aria-label="Toggle dark mode">
+    <svg class="ic" id="mobileThemeIcon" viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+  </button>
+</div>
+<div class="drawer-backdrop" id="drawerBackdrop"></div>
+
+<header class="hero" id="heroBanner">
+  <div class="hero-inner">
+    <div class="eyebrow">daily planner</div>
+    <h1>Rosewood <em>Journal</em></h1>
+    <p>A soft, unhurried space to check in with yourself, plan what matters, and keep a little proof that today counted.</p>
+  </div>
+  <button class="hero-edit" id="heroEditBtn" type="button" title="Change cover photo">
+    <svg class="ic" viewBox="0 0 24 24" style="width:14px;height:14px"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4 12.5-12.5z"/></svg>
+    Change cover
+  </button>
+  <button class="hero-reset" id="heroResetBtn" type="button" title="Reset to default cover" hidden>Reset cover</button>
+</header>
+<input type="file" id="bannerInput" accept="image/*" hidden>
+
+<div class="layout">
+
+  <aside class="sidebar glass" id="sidebar">
+    <button class="drawer-close" id="drawerClose" aria-label="Close menu">✕</button>
+    <div class="avatar-row">
+      <div class="avatar" id="avatarWrap" title="Click to change photo">
+        <img src="assets/images/avatar.png" alt="Avatar" id="avatarImg">
+        <div class="avatar-edit">✎</div>
+      </div>
+      <div><h3 id="greetName">Welcome back</h3><div class="tiny-sub" id="todayDate"></div></div>
+    </div>
+    <input type="file" id="avatarInput" accept="image/*" hidden>
+    <div class="sub">Everything you need to plan today, in one soft little dashboard.</div>
+
+    <ul class="navlist" id="navlist">
+      <li><button data-target="dashboard" onclick="jump('dashboard')"><svg class="ic" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="9" rx="1.5"/><rect x="14" y="3" width="7" height="5" rx="1.5"/><rect x="14" y="12" width="7" height="9" rx="1.5"/><rect x="3" y="16" width="7" height="5" rx="1.5"/></svg> Dashboard</button></li>
+      <li><button data-target="feeling" onclick="jump('feeling')"><svg class="ic" viewBox="0 0 24 24"><path d="M12 21s-7-4.35-9.5-8.5C.5 8.5 3 5 6.5 5c2 0 3.3 1.1 4 2.3.7-1.2 2-2.3 4-2.3 3.5 0 6 3.5 4 7.5C19 16.65 12 21 12 21z"/></svg> Feeling Today</button></li>
+      <li><button data-target="journal" onclick="jump('journal')"><svg class="ic" viewBox="0 0 24 24"><path d="M4 4h13a2 2 0 0 1 2 2v14H6a2 2 0 0 1-2-2V4z"/><path d="M8 8h8M8 12h8M8 16h5"/></svg> Journal Entries</button></li>
+      <li><button data-target="priorities" onclick="jump('priorities')"><svg class="ic" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="4.5"/><circle cx="12" cy="12" r="0.6"/></svg> Priorities &amp; To-Do</button></li>
+      <li><button data-target="habits" onclick="jump('habits')"><svg class="ic" viewBox="0 0 24 24"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg> Habit Tracker</button></li>
+      <li><button data-target="months" onclick="jump('months')"><svg class="ic" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></svg> Monthly Overview</button></li>
+      <li><button data-target="board" onclick="jump('board')"><svg class="ic" viewBox="0 0 24 24"><path d="M12 2l2.5 6.5L21 9l-5 4.2L17.5 20 12 16.5 6.5 20 8 13.2 3 9l6.5-.5z"/></svg> Mood Board</button></li>
+      <li><button data-target="settings" onclick="jump('settings')"><svg class="ic" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.6a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg> Settings</button></li>
+    </ul>
+
+    <div class="player">
+      <div class="eyebrow">ambient sound · real audio</div>
+      <div class="track" id="playerTrack">Soft piano pad</div>
+      <div class="artist" id="playerArtist">Ambient · generated</div>
+      <div class="bar" id="playerBarWrap"><i id="playerBarFill"></i></div>
+      <div class="controls">
+        <button id="playerShuffle" aria-label="Shuffle" title="Shuffle"><svg class="ic" viewBox="0 0 24 24" style="width:15px;height:15px"><path d="M16 3h5v5M4 20L21 3M21 16v5h-5M15 15l6 6M4 4l5 5"/></svg></button>
+        <button id="playerPrev" aria-label="Previous sound"><svg class="ic" viewBox="0 0 24 24" style="width:16px;height:16px"><path d="M19 5v14M5 12l12-7v14z"/></svg></button>
+        <button class="play" id="playerPlay" aria-label="Play"><svg class="ic" id="playIcon" viewBox="0 0 24 24" style="width:14px;height:14px;stroke:none;fill:currentColor"><path d="M6 4l14 8-14 8z"/></svg></button>
+        <button id="playerNext" aria-label="Next sound"><svg class="ic" viewBox="0 0 24 24" style="width:16px;height:16px"><path d="M5 5v14M19 12L7 5v14z"/></svg></button>
+        <button id="playerMute" aria-label="Mute" title="Mute"><svg class="ic" id="volIcon" viewBox="0 0 24 24" style="width:15px;height:15px"><path d="M11 5 6 9H2v6h4l5 4z"/><path d="M15.5 8.5a5 5 0 0 1 0 7"/></svg></button>
+        <span class="player-elapsed" id="playerElapsed">0:00</span>
+      </div>
+      <input type="range" id="playerVolume" class="volume-slider" min="0" max="100" value="70" aria-label="Volume">
+      <div class="sound-picker" id="soundPicker">
+        <button class="sound-chip active" data-sound="pad" title="Soft piano pad">🎹</button>
+        <button class="sound-chip" data-sound="keys" title="Slow piano melody">🎼</button>
+        <button class="sound-chip" data-sound="bowl" title="Singing bowl">🔔</button>
+        <button class="sound-chip" data-sound="strings" title="Warm strings">🎻</button>
+        <button class="sound-chip" data-sound="musicbox" title="Music box">✨</button>
+        <button class="sound-chip" data-sound="drone" title="Soft ambient drone">🌙</button>
+      </div>
+      <div class="sleep-timer-row">
+        <span>Sleep timer</span>
+        <select id="sleepTimerSelect" aria-label="Sleep timer">
+          <option value="0">Off</option>
+          <option value="5">5 min</option>
+          <option value="15">15 min</option>
+          <option value="30">30 min</option>
+          <option value="60">60 min</option>
+        </select>
+      </div>
+    </div>
+
+    <button class="reset-link" id="breatheOpenBtn" style="margin-top:12px">🌬 Take a breathing break</button>
+    <button class="reset-link" id="paletteOpenBtn">⌘K Quick search</button>
+    <button class="reset-link" id="loginSidebarBtn">👤 Set up login</button>
+    <button class="reset-link" id="resetDataBtn">Reset demo data</button>
+  </aside>
+
+  <main>
+
+    <!-- ===== DASHBOARD ===== -->
+    <section id="dashboard">
+      <div class="section-head">
+        <svg class="ic" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="9" rx="1.5"/><rect x="14" y="3" width="7" height="5" rx="1.5"/><rect x="14" y="12" width="7" height="9" rx="1.5"/><rect x="3" y="16" width="7" height="5" rx="1.5"/></svg>
+        <h2>Your Dashboard</h2>
+        <span class="count" id="dashDateRange"></span>
+      </div>
+
+      <div class="stat-grid" id="statGrid"></div>
+
+      <div class="glass affirmation-card">
+        <div class="affirmation-mark">“</div>
+        <div class="affirmation-text" id="affirmationText"></div>
+        <button class="icon-btn" id="affirmationRefresh" title="Show another" aria-label="Show another affirmation">
+          <svg class="ic" viewBox="0 0 24 24" style="width:16px;height:16px"><path d="M4 4v6h6M20 20v-6h-6"/><path d="M20 10a8 8 0 0 0-14.6-4.6M4 14a8 8 0 0 0 14.6 4.6"/></svg>
+        </button>
+      </div>
+
+      <div class="dash-cols">
+        <div class="glass dash-card">
+          <div class="dash-card-head">
+            <h3>Mood, last 7 days</h3>
+            <span class="tiny-sub">entries logged per day</span>
+          </div>
+          <div id="weekChart" class="week-chart"></div>
+        </div>
+        <div class="glass dash-card">
+          <div class="dash-card-head">
+            <h3>Today's progress</h3>
+            <span class="tiny-sub" id="progressSub">tasks completed across your lists</span>
+          </div>
+          <div class="ring-wrap">
+            <svg viewBox="0 0 120 120" class="ring">
+              <circle cx="60" cy="60" r="50" class="ring-track"/>
+              <circle cx="60" cy="60" r="50" class="ring-fill" id="ringFill"/>
+            </svg>
+            <div class="ring-label"><span id="ringPercent">0%</span><small>done</small></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="dash-cols">
+        <div class="glass dash-card">
+          <div class="dash-card-head">
+            <h3>Recent entries</h3>
+            <span class="tiny-sub">your last few check-ins</span>
+          </div>
+          <div id="recentEntries" class="recent-list"></div>
+        </div>
+        <div class="glass dash-card">
+          <div class="dash-card-head">
+            <h3>Upcoming reminders</h3>
+            <span class="tiny-sub">from Must Remember</span>
+          </div>
+          <div id="upcomingRemember" class="recent-list"></div>
+        </div>
+      </div>
+
+      <div class="glass dash-card" style="margin-top:18px">
+        <div class="dash-card-head">
+          <h3>Achievements</h3>
+          <span class="tiny-sub" id="achievementsSub"></span>
+        </div>
+        <div class="achv-grid" id="achvGrid"></div>
+      </div>
+    </section>
+
+    <section id="feeling">
+      <div class="section-head">
+        <svg class="ic" viewBox="0 0 24 24"><path d="M12 21s-7-4.35-9.5-8.5C.5 8.5 3 5 6.5 5c2 0 3.3 1.1 4 2.3.7-1.2 2-2.3 4-2.3 3.5 0 6 3.5 4 7.5C19 16.65 12 21 12 21z"/></svg>
+        <h2>Feeling Today</h2>
+        <span class="count" id="moodTotalCount">0 moods logged</span>
+      </div>
+      <div class="mood-grid" id="moodGrid"></div>
+    </section>
+
+    <section id="journal">
+      <div class="section-head">
+        <svg class="ic" viewBox="0 0 24 24"><path d="M4 4h13a2 2 0 0 1 2 2v14H6a2 2 0 0 1-2-2V4z"/><path d="M8 8h8M8 12h8M8 16h5"/></svg>
+        <h2>Daily Journal Entry</h2>
+        <button class="btn btn-primary btn-sm" id="addEntryBtn" style="margin-left:auto">+ New entry</button>
+      </div>
+      <div class="search-row">
+        <input type="text" id="journalSearch" placeholder="Search entries, reflections, or tags…" aria-label="Search journal entries">
+        <select id="journalSort" class="mini-select" aria-label="Sort entries">
+          <option value="newest">Newest first</option>
+          <option value="oldest">Oldest first</option>
+          <option value="favorites">Favorites first</option>
+        </select>
+        <button class="btn btn-ghost btn-sm" id="exportEntriesBtn" title="Export entries as CSV">Export CSV</button>
+        <span class="filter-pill" id="activeFilterPill" hidden>Filtering: <b id="activeFilterText"></b> <button id="clearFilterBtn" aria-label="Clear filter">✕</button></span>
+      </div>
+      <div class="tag-chip-row" id="tagChipRow"></div>
+      <div class="table-wrap glass">
+        <table>
+          <thead><tr><th></th><th>Entry</th><th>Date</th><th>Mood</th><th>Reflection</th><th>Tags</th><th></th></tr></thead>
+          <tbody id="journalBody"></tbody>
+        </table>
+        <div class="empty-state" id="journalEmpty" hidden>No entries match yet — try a different search, or add a new one.</div>
+      </div>
+    </section>
+
+    <section id="priorities">
+      <div class="section-head">
+        <svg class="ic" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="4.5"/><circle cx="12" cy="12" r="0.6"/></svg>
+        <h2>Priorities &amp; To-Do</h2>
+        <span class="count" id="prioritiesCount"></span>
+      </div>
+      <div class="cols3">
+        <div class="col-card glass" data-list="top">
+          <div class="top-ic" style="background:#F4C9D6;color:#8B3F5C">🎯</div>
+          <h3>Top 3 Priorities</h3>
+          <div class="sub">Only the 3 things that truly matter today.</div>
+          <div class="mini-progress"><i id="progress-top"></i></div>
+          <ul class="item-list" id="list-top"></ul>
+          <div class="add-row"><input type="text" placeholder="Add a priority…" id="input-top" maxlength="140" aria-label="Add a top priority"><button data-list="top" class="add-item-btn">Add</button></div>
+        </div>
+        <div class="col-card glass" data-list="todo">
+          <div class="top-ic" style="background:#DCE9D3;color:#4F6B3E">✓</div>
+          <h3>To-Do List</h3>
+          <div class="sub">Everything else you want to get done.</div>
+          <div class="mini-progress"><i id="progress-todo"></i></div>
+          <ul class="item-list" id="list-todo"></ul>
+          <div class="add-row"><input type="text" placeholder="Add a to-do…" id="input-todo" maxlength="140" aria-label="Add a to-do item"><button data-list="todo" class="add-item-btn">Add</button></div>
+        </div>
+        <div class="col-card glass" data-list="remember">
+          <div class="top-ic" style="background:#F0DDBF;color:#8A5A15">✦</div>
+          <h3>Must Remember</h3>
+          <div class="sub">Things you don't want slipping through the cracks.</div>
+          <div class="mini-progress"><i id="progress-remember"></i></div>
+          <ul class="item-list" id="list-remember"></ul>
+          <div class="add-row"><input type="text" placeholder="Add a reminder…" id="input-remember" maxlength="140" aria-label="Add a reminder"><button data-list="remember" class="add-item-btn">Add</button></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="habits">
+      <div class="section-head">
+        <svg class="ic" viewBox="0 0 24 24"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+        <h2>Habit Tracker</h2>
+        <button class="btn btn-primary btn-sm" id="addHabitBtn" style="margin-left:auto">+ New habit</button>
+      </div>
+      <div class="table-wrap glass habit-wrap">
+        <div class="habit-table" id="habitTable"></div>
+        <div class="empty-state" id="habitEmpty" hidden>No habits yet — add one to start tracking your week.</div>
+      </div>
+    </section>
+
+    <section id="months">
+      <div class="section-head">
+        <svg class="ic" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></svg>
+        <h2>Monthly Overview</h2>
+        <span class="count">click a month to add notes &amp; see entries</span>
+      </div>
+      <div class="gallery" id="monthGallery"></div>
+    </section>
+
+    <section id="board">
+      <div class="section-head">
+        <svg class="ic" viewBox="0 0 24 24"><path d="M12 2l2.5 6.5L21 9l-5 4.2L17.5 20 12 16.5 6.5 20 8 13.2 3 9l6.5-.5z"/></svg>
+        <h2>Mood Board</h2>
+      </div>
+      <div class="board-grid" id="boardGrid"></div>
+    </section>
+
+    <section id="settings">
+      <div class="section-head">
+        <svg class="ic" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.6a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+        <h2>Settings</h2>
+      </div>
+      <div class="settings-grid">
+        <div class="glass settings-card">
+          <h3>Appearance</h3>
+          <div class="settings-row">
+            <div><b>Dark mode</b><div class="tiny-sub">Easier on the eyes at night</div></div>
+            <label class="switch"><input type="checkbox" id="darkModeToggle"><span class="slider"></span></label>
+          </div>
+          <div class="settings-row">
+            <div><b>Compact text</b><div class="tiny-sub">Slightly smaller type density</div></div>
+            <label class="switch"><input type="checkbox" id="compactToggle"><span class="slider"></span></label>
+          </div>
+          <div class="settings-row" style="align-items:flex-start">
+            <div><b>Accent color</b><div class="tiny-sub">Pick the palette that feels right</div></div>
+            <div class="theme-swatches" id="accentSwatches">
+              <button class="theme-swatch" data-accent="rose" style="background:linear-gradient(135deg,#F4C9D6,#C96C8A)" title="Rose"></button>
+              <button class="theme-swatch" data-accent="lavender" style="background:linear-gradient(135deg,#E4D6F5,#8B63C9)" title="Lavender"></button>
+              <button class="theme-swatch" data-accent="sage" style="background:linear-gradient(135deg,#DCE9D3,#6E9550)" title="Sage"></button>
+              <button class="theme-swatch" data-accent="amber" style="background:linear-gradient(135deg,#F6DFAF,#C98A2E)" title="Amber"></button>
+              <button class="theme-swatch" data-accent="ocean" style="background:linear-gradient(135deg,#CDE3F0,#3E86B8)" title="Ocean"></button>
+            </div>
+          </div>
+        </div>
+        <div class="glass settings-card">
+          <h3>Account &amp; Login</h3>
+          <div class="tiny-sub" id="accountStatus" style="margin-bottom:12px">No login set up — anyone with this browser can open your journal.</div>
+          <div class="settings-btn-row">
+            <button class="btn btn-ghost btn-sm" id="accountCreateBtn">👤 Create login</button>
+            <button class="btn btn-ghost btn-sm" id="accountChangePassBtn" hidden>✎ Change password</button>
+            <button class="btn btn-ghost btn-sm" id="accountLogoutBtn" hidden>🔓 Log out</button>
+            <button class="btn btn-ghost btn-sm" id="accountRemoveBtn" hidden>🗑 Remove login</button>
+          </div>
+          <div class="tiny-sub" style="margin-top:10px">Your username and password are stored (hashed) only on this device, and gate a fresh session each time you reopen the page.</div>
+        </div>
+        <div class="glass settings-card">
+          <h3>Your data</h3>
+          <div class="tiny-sub" style="margin-bottom:12px">Everything lives in this browser's local storage. Back it up or move it to another device with export/import.</div>
+          <div class="settings-btn-row">
+            <button class="btn btn-ghost btn-sm" id="exportDataBtn">⬇ Export backup (.json)</button>
+            <button class="btn btn-ghost btn-sm" id="importDataBtn">⬆ Import backup</button>
+            <button class="btn btn-ghost btn-sm" id="printBtn">🖨 Print / Save PDF</button>
+          </div>
+          <input type="file" id="importFileInput" accept="application/json" hidden>
+          <button class="reset-link" id="resetDataBtn2" style="margin-top:16px">Reset demo data</button>
+        </div>
+        <div class="glass settings-card">
+          <h3>Keyboard shortcuts</h3>
+          <ul class="shortcut-list">
+            <li><kbd>/</kbd> focus search</li>
+            <li><kbd>N</kbd> new journal entry</li>
+            <li><kbd>Esc</kbd> close dialogs</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <footer>made with <b>♥</b> — Rosewood Journal</footer>
+  </main>
+</div>
+
+<!-- ===== MOBILE BOTTOM NAV ===== -->
+<nav class="mobile-bottomnav" id="mobileBottomNav">
+  <button data-target="dashboard" class="bn-active"><svg class="ic" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="9" rx="1.5"/><rect x="14" y="3" width="7" height="5" rx="1.5"/><rect x="14" y="12" width="7" height="9" rx="1.5"/><rect x="3" y="16" width="7" height="5" rx="1.5"/></svg><span>Home</span></button>
+  <button data-target="journal"><svg class="ic" viewBox="0 0 24 24"><path d="M4 4h13a2 2 0 0 1 2 2v14H6a2 2 0 0 1-2-2V4z"/><path d="M8 8h8M8 12h8M8 16h5"/></svg><span>Journal</span></button>
+  <button class="bn-fab" id="fabAdd" aria-label="New journal entry"><svg class="ic" viewBox="0 0 24 24" style="stroke-width:2.4"><path d="M12 5v14M5 12h14"/></svg></button>
+  <button data-target="priorities"><svg class="ic" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="4.5"/><circle cx="12" cy="12" r="0.6"/></svg><span>Tasks</span></button>
+  <button data-target="habits"><svg class="ic" viewBox="0 0 24 24"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg><span>Habits</span></button>
+</nav>
+
+<!-- Journal entry modal -->
+<div class="modal-overlay" id="entryModalOverlay" hidden>
+  <div class="modal glass" role="dialog" aria-modal="true" aria-labelledby="entryModalTitle">
+    <div class="modal-header">
+      <h3 id="entryModalTitle">New Journal Entry</h3>
+      <button class="modal-close" data-close>✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="field">
+        <label for="entryTitle">Title</label>
+        <input type="text" id="entryTitle" placeholder="e.g. Small win today" maxlength="80">
+      </div>
+      <div class="field-row">
+        <div class="field">
+          <label for="entryDate">Date</label>
+          <input type="date" id="entryDate">
+        </div>
+        <div class="field">
+          <label for="entryMood">Mood</label>
+          <select id="entryMood"></select>
+        </div>
+      </div>
+      <div class="field">
+        <div class="field-label-row">
+          <label for="entryReflection">Reflection</label>
+          <div style="display:flex;gap:8px">
+            <button type="button" class="prompt-btn" id="voiceBtn" title="Speak your reflection">🎙️ Speak</button>
+            <button type="button" class="prompt-btn" id="journalPromptBtn">✨ Get a prompt</button>
+          </div>
+        </div>
+        <textarea id="entryReflection" rows="3" placeholder="What happened, and how did it feel?" maxlength="600"></textarea>
+      </div>
+      <div class="field">
+        <label for="entryTags">Tags <span class="tiny-sub">(comma separated)</span></label>
+        <input type="text" id="entryTags" placeholder="Gratitude, Wins, Self-Care…">
+      </div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" data-close>Cancel</button>
+      <button class="btn btn-primary" id="saveEntryBtn">Save entry</button>
+    </div>
+  </div>
+</div>
+
+<!-- Month notes + calendar modal -->
+<div class="modal-overlay" id="monthModalOverlay" hidden>
+  <div class="modal glass modal-wide" role="dialog" aria-modal="true" aria-labelledby="monthModalTitle">
+    <div class="modal-header">
+      <h3 id="monthModalTitle">Month</h3>
+      <button class="modal-close" data-close>✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="mini-cal" id="miniCal"></div>
+      <div class="field">
+        <label for="monthNotes">Notes &amp; goals for this month</label>
+        <textarea id="monthNotes" rows="4" placeholder="Intentions, goals, memories to hold onto…"></textarea>
+      </div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" data-close>Cancel</button>
+      <button class="btn btn-primary" id="saveMonthBtn">Save notes</button>
+    </div>
+  </div>
+</div>
+
+<!-- Mood board add modal -->
+<div class="modal-overlay" id="boardModalOverlay" hidden>
+  <div class="modal glass" role="dialog" aria-modal="true" aria-labelledby="boardModalTitle">
+    <div class="modal-header">
+      <h3 id="boardModalTitle">Add Inspiration</h3>
+      <button class="modal-close" data-close>✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="board-tabs" role="tablist" aria-label="Inspiration type">
+        <button type="button" class="board-tab active" id="boardTabPhoto" role="tab" aria-selected="true">📷 Photo</button>
+        <button type="button" class="board-tab" id="boardTabNote" role="tab" aria-selected="false">📝 Sticky note</button>
+      </div>
+      <div class="field" id="boardImageField">
+        <label for="boardImage">Image</label>
+        <input type="file" id="boardImage" accept="image/*">
+      </div>
+      <div class="field" id="boardCaptionField">
+        <label for="boardCaption">Caption</label>
+        <input type="text" id="boardCaption" placeholder="e.g. slow sundays" maxlength="60">
+      </div>
+      <div class="field" id="boardColorField" hidden>
+        <span class="field-label-text" id="boardColorLabel">Note color</span>
+        <div class="color-swatches" id="boardColorSwatches" role="group" aria-labelledby="boardColorLabel"></div>
+      </div>
+      <div class="field" id="boardNoteField" hidden>
+        <label for="boardNoteText">Note</label>
+        <textarea id="boardNoteText" rows="3" placeholder="A little reminder, quote, or intention…" maxlength="140"></textarea>
+      </div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" data-close>Cancel</button>
+      <button class="btn btn-primary" id="saveBoardBtn">Pin it</button>
+    </div>
+  </div>
+</div>
+
+<!-- Habit add modal -->
+<div class="modal-overlay" id="habitModalOverlay" hidden>
+  <div class="modal glass" role="dialog" aria-modal="true" aria-labelledby="habitModalTitle">
+    <div class="modal-header">
+      <h3 id="habitModalTitle">New Habit</h3>
+      <button class="modal-close" data-close>✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="field">
+        <label for="habitName">Habit name</label>
+        <input type="text" id="habitName" placeholder="e.g. Drink water, Read 10 pages…" maxlength="60">
+      </div>
+      <div class="field">
+        <span class="field-label-text" id="habitColorLabel">Color</span>
+        <div class="color-swatches" id="habitColorSwatches" role="group" aria-labelledby="habitColorLabel"></div>
+      </div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" data-close>Cancel</button>
+      <button class="btn btn-primary" id="saveHabitBtn">Add habit</button>
+    </div>
+  </div>
+</div>
+
+<!-- Breathing exercise modal -->
+<div class="modal-overlay" id="breathModalOverlay" hidden>
+  <div class="modal glass breath-modal" role="dialog" aria-modal="true" aria-labelledby="breathModalTitle">
+    <div class="modal-header">
+      <h3 id="breathModalTitle">Take a breath</h3>
+      <button class="modal-close" data-close>✕</button>
+    </div>
+    <div class="modal-body breath-body">
+      <div class="breath-stage">
+        <div class="breath-circle" id="breathCircle"></div>
+        <div class="breath-label" id="breathLabel">Ready when you are</div>
+      </div>
+      <div class="tiny-sub breath-count" id="breathCount"></div>
+      <div class="tiny-sub" style="margin-top:6px">A slow 4-4-4-4 box breath. Follow the circle — in, hold, out, hold.</div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" data-close>Close</button>
+      <button class="btn btn-primary" id="breathStartBtn">Start</button>
+    </div>
+  </div>
+</div>
+
+<!-- Account create / change-password / remove modal -->
+<div class="modal-overlay" id="accountModalOverlay" hidden>
+  <div class="modal glass" role="dialog" aria-modal="true" aria-labelledby="accountModalTitle">
+    <div class="modal-header">
+      <h3 id="accountModalTitle">Create login</h3>
+      <button class="modal-close" data-close>✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="field" id="acctUsernameField">
+        <label for="acctUsername">Username</label>
+        <input type="text" id="acctUsername" maxlength="30" autocomplete="off" placeholder="e.g. rosewood">
+      </div>
+      <div class="field" id="acctCurrentPassField" hidden>
+        <label for="acctCurrentPass">Current password</label>
+        <input type="password" id="acctCurrentPass" maxlength="60" autocomplete="off" placeholder="••••••••">
+      </div>
+      <div class="field" id="acctNewPassField">
+        <label for="acctNewPass" id="acctNewPassLabel">Password <span class="tiny-sub">(min 4 characters)</span></label>
+        <input type="password" id="acctNewPass" maxlength="60" autocomplete="off" placeholder="••••••••">
+      </div>
+      <div class="field" id="acctConfirmPassField">
+        <label for="acctConfirmPass">Confirm password</label>
+        <input type="password" id="acctConfirmPass" maxlength="60" autocomplete="off" placeholder="••••••••">
+      </div>
+      <div class="tiny-sub" id="acctError" style="color:#b23b57;min-height:16px"></div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" data-close>Cancel</button>
+      <button class="btn btn-primary" id="acctSaveBtn">Create login</button>
+    </div>
+  </div>
+</div>
+
+<!-- Command palette -->
+<div class="modal-overlay" id="paletteOverlay" hidden>
+  <div class="modal glass palette-modal" role="dialog" aria-modal="true" aria-label="Quick search">
+    <input type="text" id="paletteInput" class="palette-input" placeholder="Jump to a section, entry, task, or habit…" autocomplete="off" aria-label="Quick search">
+    <div class="palette-results" id="paletteResults"></div>
+    <div class="palette-hint"><span>↑↓ to navigate · Enter to go</span><span><kbd>Esc</kbd> to close</span></div>
+  </div>
+</div>
+
+<!-- Login screen -->
+<div class="lock-screen" id="lockScreen" hidden>
+  <div class="lock-card glass">
+    <div class="lock-ic">🔒</div>
+    <h2>Welcome back</h2>
+    <p class="tiny-sub" id="loginSubtext">Sign in to open your journal.</p>
+    <input type="text" id="loginUsernameInput" placeholder="Username" autocomplete="username" aria-label="Username" style="margin-bottom:8px">
+    <input type="password" id="loginPasswordInput" placeholder="Password" autocomplete="current-password" aria-label="Password">
+    <div class="tiny-sub" id="lockError" style="color:#b23b57;min-height:16px"></div>
+    <button class="btn btn-primary" id="lockUnlockBtn" style="width:100%;margin-top:4px">Log in</button>
+  </div>
+</div>
+
+<div class="toast-wrap" id="toastWrap"></div>
+
+<script src="js/script.js"></script>
+</body>
+</html>
